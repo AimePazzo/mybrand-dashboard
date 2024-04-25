@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>MY Brand | Dashboard</title>
+  </head>
+
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <a href="#" class="logo">
+        <i class="bx bx-code-alt"></i>
+        <div class="logo-name"><span>My</span>Brand</div>
+      </a>
+      <ul class="side-menu">
+        <li class="active">
+          <a href="#"><i class="bx bxs-dashboard"></i>Dashboard</a>
+        </li>
+        <!-- <li>
+          <a href="#" id="blog-link"><i class="bx bx-bookmarks"></i>Blog</a>
+        </li> -->
+        <li>
+          <a href="#" id="project-link"><i class="bx bx-analyse"></i>Project</a>
+        </li>
+        <li onclick="getMessage()">
+          <a href="#" id="message-link"
+            ><i class="bx bx-message-square-dots"></i>Message</a
+          >
+        </li>
+        <li>
+          <a href="#" id="user-link"><i class="bx bx-group"></i>Users</a>
+        </li>
+        <!-- <li>
+          <a href="#" id="settings-link"><i class="bx bx-cog"></i>Settings</a>
+        </li> -->
+      </ul>
+      <ul class="side-menu">
+        <li>
+          <a href="#" class="logout" id="logout">
+            <i class="bx bx-log-out-circle"></i>
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- End of Sidebar -->
+
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Navbar -->
+      <nav>
+        <i class="bx bx-menu"></i>
+        <form action="#">
+          <div class="form-input">
+            <input type="search" placeholder="Search..." />
+            <button class="search-btn" type="submit">
+              <i class="bx bx-search"></i>
+            </button>
+          </div>
+        </form>
+        <input type="checkbox" id="theme-toggle" hidden />
+        <label for="theme-toggle" class="theme-toggle"></label>
+        <a href="#" class="notif">
+          <i class="bx bx-bell"></i>
+          <span class="count">12</span>
+        </a>
+        <a href="#" class="profile">
+          <img src="images/logo.png" />
+        </a>
+      </nav>
+
+      <!-- End of Navbar -->
+
+      <main id="content-dashboard">
+        <div class="header">
+          <div class="left">
+            <h1>Dashboard</h1>
+          </div>
+        </div>
+
+        <!-- Insights -->
+        <ul class="insights">
+          <li>
+            <i class="bx bx-user"></i>
+            <span class="info">
+              <h3>0</h3>
+              <p>Users</p>
+            </span>
+          </li>
+          <li>
+            <i class="bx bx-show-alt"></i>
+            <span class="info">
+              <h3>0</h3>
+              <p>Project</p>
+            </span>
+          </li>
+          <li>
+            <i class="bx bx-line-chart"></i>
+            <span class="info">
+              <h3>0</h3>
+              <p>Blog</p>
+            </span>
+          </li>
+        </ul>
+      </main>
+
+
+      <main id="content-project" class="hide-content">
+        <div class="header">
+          <div class="left">
+            <h1>Project</h1>
+          </div>
+        </div>
+
+        <!-- Insights -->
+        <div class="addProject">
+          <button id="openForm">Add Project</button>
+        </div>
+        <!-- End of Insights -->
+
+        <!-- Pop up form -->
+        <div class="form-popup" id="projectForm">
+          <form action="#" class="form-container">
+            <h2>Add New Project</h2>
+            <label for="title"><b>Title</b></label>
+            <input
+              type="text"
+              placeholder="Enter Title"
+              name="title"
+              required
+            />
+
+            <label for="title"><b>Field</b></label>
+            <input
+              type="text"
+              placeholder="Enter Field"
+              name="field"
+              required
+            />
+
+            <label for="description"><b>Description</b></label>
+            <textarea
+              placeholder="Enter Description"
+              name="description"
+              required
+            ></textarea>
+
+            <label for="image"><b>Image</b></label>
+            <input type="file" name="image" accept="image/*" required />
+
+            <button type="submit" class="btn">Submit</button>
+            <button type="button" class="btn cancel project" id="closeForm">
+              Close
+            </button>
+          </form>
+        </div>
+        <!-- End of Pop up form  -->
+        <div class="bottom-data">
+          <div class="orders">
+            <div class="header">
+              <i class="bx bx-receipt"></i>
+              <h3>Project List</h3>
+              <i class="bx bx-filter"></i>
+              <i class="bx bx-search"></i>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Image</th>
+                  <th>Field</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <main id="content-user" class="hide-content">
+        <div class="header">
+          <div class="left">
+            <h1>Users</h1>
+          </div>
+        </div>
+
+        <!-- Insights -->
+        <!-- End of Insights -->
+
+        <div class="bottom-data">
+          <div class="orders">
+            <div class="header">
+              <i class="bx bx-receipt"></i>
+              <h3>Users</h3>
+              <i class="bx bx-filter"></i>
+              <i class="bx bx-search"></i>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>N<sup>0</sup></th>
+                  <th>UserName</th>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                 
+                </tr>
+              </thead>
+              <tbody id="user-table-body">
+                <!-- Data will be displayed here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <main id="content-settings" class="hide-content">
+        <div class="header">
+          <div class="left">
+            <h1>Settings</h1>
+          </div>
+        </div>
+
+        <!-- Insights -->
+        <ul class="insights">
+          <li>
+            <i class="bx bx-user"></i>
+            <span class="info">
+              <h3>0</h3>
+              <p>Users</p>
+            </span>
+          </li>
+          <li>
+            <i class="bx bx-show-alt"></i>
+            <span class="info">
+              <h3>0</h3>
+              <p>Project</p>
+            </span>
+          </li>
+          <li>
+            <i class="bx bx-line-chart"></i>
+            <span class="info">
+              <h3>0</h3>
+              <p>Blog</p>
+            </span>
+          </li>
+        </ul>
+        <!-- End of Insights -->
+
+        <div class="bottom-data">
+          <div class="orders">
+            <div class="header">
+              <i class="bx bx-receipt"></i>
+              <h3>Recent Message</h3>
+              <i class="bx bx-filter"></i>
+              <i class="bx bx-search"></i>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <i class="bx bx-user"></i>
+
+                    <p>John Doe</p>
+                  </td>
+                  <td>14-08-2023</td>
+                  <td><span class="status completed">Completed</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <i class="bx bx-user"></i>
+
+                    <p>John Doe</p>
+                  </td>
+                  <td>14-08-2023</td>
+                  <td><span class="status pending">Pending</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <i class="bx bx-user"></i>
+
+                    <p>John Doe</p>
+                  </td>
+                  <td>14-08-2023</td>
+                  <td><span class="status process">Processing</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+
+      <main id="content-message" class="hide-content">
+        <div class="header">
+          <div class="left">
+            <h1>Message</h1>
+          </div>
+        </div>
+
+        <div class="bottom-data">
+          <div class="orders">
+            <div class="header">
+              <i class="bx bx-receipt"></i>
+              <h3>Messages</h3>
+              <i class="bx bx-filter"></i>
+              <i class="bx bx-search"></i>
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>N<sup>0</sup></th>
+                  <th>UserName</th>
+                  <th>Email</th>
+                  <th>Subject</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="message-table-body">
+                <!-- Data will be displayed here -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="index.js"></script>
+    <script>
+      const openFormProject = document.getElementById("openForm");
+      const openFormBlog = document.getElementById("openFormBlog");
+      const closeFormButton = document.getElementById("closeForm");
+      const closeFormBlog = document.getElementById("closeFormBlog");
+      const projectForm = document.getElementById("projectForm");
+      const blogForm = document.getElementById("blogForm");
+
+      openFormProject.addEventListener("click", () => {
+        projectForm.style.display = "block";
+      });
+      // openFormBlog.addEventListener("click", () => {
+      //   blogForm.style.display = "block";
+      // });
+      closeFormButton.addEventListener("click", () => {
+        projectForm.style.display = "none";
+      });
+
+      // closeFormBlog.addEventListener("click", () => {
+      //   blogForm.style.display = "none";
+      // });
+
+      window.addEventListener("click", (event) => {
+        if (event.target == projectForm) {
+          projectForm.style.display = "none";
+        } else if (event.target == blogForm) {
+          blogForm.style.display = "none";
+        }
+      });
+
+      document.getElementById('logout').addEventListener("click", () => {
+          localStorage.removeItem("token");
+          window.location.href = "./index.html";
+        });
+
+      async function getMessage() {
+        const response = await fetch(
+          "http://localhost:5000/api/v1/contact/get-messages",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        const tbody = document.getElementById("message-table-body");
+
+        data.forEach((message,index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+          <td>${index + 1}</td>
+        <td>${message.userName}</td>
+        <td>${message.email}</td>
+        <td>${message.subject}</td>
+        <td>${message.message}</td>
+        <td><span class= "status ${message.status}">${message.status}</span></td>
+      `;
+          tbody.appendChild(row);
+        });
+      }
+
+      async function getUsers() {
+        const response = await fetch(
+          "http://localhost:5000/api/v1/user/get-users",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        console.log(data);
+        const tbodyUser = document.getElementById("user-table-body");
+        console.log(tbodyUser);
+        data.forEach((user,index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${user.userName}</td>
+        <td>${user.firstName +" "+ user.lastName}</td>
+        <td>${user.email}</td>
+      `;
+          tbodyUser.appendChild(row);
+        });
+      }
+
+      document.addEventListener("DOMContentLoaded", getUsers);
+    </script>
+  </body>
+</html>

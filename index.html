@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../icon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../icon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../icon/favicon-16x16.png" />
+    <!-- <link rel="manifest" href="../icon/site.webmanifest" /> -->
+    <link rel="mask-icon" href="../icon/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="msapplication-TileColor" content="#2b5797" />
+    <meta name="theme-color" content="#ffffff" />
+  </head>
+  <body>
+    <main class="container-login">
+      <div class="form-container">
+        <form id="signin-form">
+          <h2>Login</h2>
+          <div class="email">
+            <label for="email">Email</label> <br />
+            <input type="email" id="email" name="email" required />
+          </div>
+          <div class="pass">
+            <label for="password">Password</label> <br />
+            <input type="password" id="password" name="password" required />
+          </div>
+          <button type="submit">SignIn</button>
+        </form>
+      </div>
+    </main>
+    <footer></footer>
+    <script>
+
+function showToast(message, type) {
+    const toast = document.createElement("div");
+    toast.classList.add("toast");
+    toast.innerHTML = message;
+  
+    if (type === "error") {
+      toast.classList.add("error");
+    } else if (type === "success") {
+      toast.classList.add("success");
+    }else if(type === 'info') {
+      toast.classList.add("info");
+    } else if (type === "confirmation") {
+      const confirmationToast = document.createElement("div");
+      confirmationToast.id = "confirmation-toast";
+      confirmationToast.classList.add("confirmation-toast");
+      const toastMessage = document.createElement("div");
+      toastMessage.classList.add("toast-message");
+      toastMessage.innerHTML = `
+        <div style="display:flex;justify-content:center;align-items:center"><p>${message}</p></div>
+        <div class="button-container">
+          <button id="confirm-delete">Confirm</button>
+          <button id="cancel-delete">Cancel</button>
+        </div>`;
+      confirmationToast.appendChild(toastMessage);
+      document.body.appendChild(confirmationToast);
+  
+      const confirmButton = document.getElementById('confirm-delete');
+      const cancelButton = document.getElementById('cancel-delete');
+  
+      confirmButton.addEventListener('click', () => {
+        confirmationToast.remove();
+        // Call the function to handle delete here
+      });
+  
+      cancelButton.addEventListener('click', () => {
+        confirmationToast.remove();
+      });
+  
+      return;
+    }else {
+      console.error("Unknown toast type:", type);
+      return;
+    }
+  
+    document.body.appendChild(toast);
+  
+    setTimeout(() => {
+      toast.remove();
+    }, 3000);
+  }
+      document
+        .getElementById("signin-form")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(this);
+          const email = formData.get("email");
+          const password = formData.get("password");
+
+          try {
+            const response = await fetch(
+              "http://localhost:5000/api/v1/user/admin-login",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
+              }
+            );
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.message);
+            }
+
+            const responseData = await response.json();
+            const token = responseData.token;
+            localStorage.setItem("token", token);
+            showToast(`<i class="ri-checkbox-circle-fill" style="color:green !important"></i>`+responseData.message, "success");
+            setTimeout(()=>{
+              window.location.href = "./dashboard.html";
+            }, 3000);
+          } catch (error) {
+            showToast("❌ "+error.message, "error");
+          }
+        });
+    </script>
+  </body>
+</html>
