@@ -13,6 +13,7 @@
     --light-warning: #FFF2C6;
     --success: #388E3C;
     --light-success: #BBF7D0;
+    
 }
 
 *{
@@ -235,11 +236,9 @@ body{
 .form-popup {
     display: none;
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 55%;
+    left: 60%;
     transform: translate(-50%, -50%);
-    background-color: white;
-    border: 3px solid #f1f1f1;
     z-index: 9;
     padding: 20px;
     width: 80%;
@@ -556,20 +555,19 @@ body{
 .content main .bottom-data .orders table th{
     padding-bottom: 12px;
     font-size: 13px;
-    text-align: left;
     border-bottom: 1px solid var(--grey);
 }
 
 .content main .bottom-data .orders table td{
-    padding: 16px 0;
+    padding: 16px 5px;
 }
 
-.content main .bottom-data .orders table tr td:first-child{
+/* .content main .bottom-data .orders table tr td:first-child{
     display: flex;
     align-items: center;
     grid-gap: 12px;
     padding-left: 6px;
-}
+} */
 
 .content main .bottom-data .orders table td img{
     width: 36px;
@@ -579,7 +577,7 @@ body{
 }
 
 .content main .bottom-data .orders table tbody tr{
-    cursor: pointer;
+    /* cursor: pointer; */
     transition: all 0.3s ease;
 }
 
@@ -684,6 +682,18 @@ a{
 
 }
 
+.toast {
+    position: fixed;
+    right: 20px;
+    left: 50%;
+    transform: translateY(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #323131;
+    font-weight: bold;
+    z-index: 9999;
+  }
 
 @media screen and (max-width: 768px) {
     .sidebar{

@@ -7,7 +7,7 @@
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
     />
-    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon" />
 
     <link rel="stylesheet" href="style.css" />
     <title>MY Brand | Dashboard</title>
@@ -30,7 +30,7 @@
         <li>
           <a href="#" id="project-link"><i class="bx bx-analyse"></i>Project</a>
         </li>
-        <li onclick="getMessage()">
+        <li>
           <a href="#" id="message-link"
             ><i class="bx bx-message-square-dots"></i>Message</a
           >
@@ -112,7 +112,6 @@
         </ul>
       </main>
 
-
       <main id="content-project" class="hide-content">
         <div class="header">
           <div class="left">
@@ -128,13 +127,18 @@
 
         <!-- Pop up form -->
         <div class="form-popup" id="projectForm">
-          <form action="#" class="form-container">
-            <h2>Add New Project</h2>
+          <form
+            class="form-container"
+            id="project-form"
+            enctype="multipart/form-data"
+          >
+            <h2 id="form-title">Add New Project</h2>
             <label for="title"><b>Title</b></label>
             <input
               type="text"
               placeholder="Enter Title"
               name="title"
+              id="title"
               required
             />
 
@@ -143,6 +147,7 @@
               type="text"
               placeholder="Enter Field"
               name="field"
+              id="field"
               required
             />
 
@@ -150,18 +155,22 @@
             <textarea
               placeholder="Enter Description"
               name="description"
+              id="description"
               required
             ></textarea>
 
             <label for="image"><b>Image</b></label>
             <input type="file" name="image" accept="image/*" required />
 
-            <button type="submit" class="btn">Submit</button>
+            <button type="submit" class="btn" id="form-submit-button">
+              Submit
+            </button>
             <button type="button" class="btn cancel project" id="closeForm">
               Close
             </button>
           </form>
         </div>
+
         <!-- End of Pop up form  -->
         <div class="bottom-data">
           <div class="orders">
@@ -174,13 +183,17 @@
             <table>
               <thead>
                 <tr>
-                  <th>Title</th>
-                  <th>Image</th>
-                  <th>Field</th>
-                  <th>Description</th>
+                  <th>N<sup>0</sup></th>
+                  <th>Project Title</th>
+                  <th>Project Field</th>
+                  <th>Project Image</th>
+                  <th>Project Description</th>
+                  <th>action</th>
                 </tr>
               </thead>
-              
+              <tbody id="project-table-body">
+                <!-- Data will be displayed here -->
+              </tbody>
             </table>
           </div>
         </div>
@@ -210,7 +223,6 @@
                   <th>UserName</th>
                   <th>Full Name</th>
                   <th>Email</th>
-                 
                 </tr>
               </thead>
               <tbody id="user-table-body">
@@ -221,39 +233,12 @@
         </div>
       </main>
 
-      <main id="content-settings" class="hide-content">
+      <!-- <main id="content-settings" class="hide-content">
         <div class="header">
           <div class="left">
             <h1>Settings</h1>
           </div>
         </div>
-
-        <!-- Insights -->
-        <ul class="insights">
-          <li>
-            <i class="bx bx-user"></i>
-            <span class="info">
-              <h3>0</h3>
-              <p>Users</p>
-            </span>
-          </li>
-          <li>
-            <i class="bx bx-show-alt"></i>
-            <span class="info">
-              <h3>0</h3>
-              <p>Project</p>
-            </span>
-          </li>
-          <li>
-            <i class="bx bx-line-chart"></i>
-            <span class="info">
-              <h3>0</h3>
-              <p>Blog</p>
-            </span>
-          </li>
-        </ul>
-        <!-- End of Insights -->
-
         <div class="bottom-data">
           <div class="orders">
             <div class="header">
@@ -302,7 +287,7 @@
             </table>
           </div>
         </div>
-      </main>
+      </main> -->
 
       <main id="content-message" class="hide-content">
         <div class="header">
@@ -370,10 +355,10 @@
         }
       });
 
-      document.getElementById('logout').addEventListener("click", () => {
-          localStorage.removeItem("token");
-          window.location.href = "./index.html";
-        });
+      document.getElementById("logout").addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "./index.html";
+      });
 
       async function getMessage() {
         const response = await fetch(
@@ -389,48 +374,260 @@
         const data = await response.json();
         const tbody = document.getElementById("message-table-body");
 
-        data.forEach((message,index) => {
+        data.forEach((message, index) => {
           const row = document.createElement("tr");
           row.innerHTML = `
-          <td>${index + 1}</td>
-        <td>${message.userName}</td>
-        <td>${message.email}</td>
-        <td>${message.subject}</td>
-        <td>${message.message}</td>
-        <td><span class= "status ${message.status}">${message.status}</span></td>
-      `;
+              <td>${index + 1}</td>
+            <td>${message.userName}</td>
+            <td>${message.email}</td>
+            <td>${message.subject}</td>
+            <td>${message.message}</td>
+            <td><span class= "status ${message.status}">${
+            message.status
+          }</span></td>
+          `;
           tbody.appendChild(row);
         });
       }
 
       async function getUsers() {
+        try {
+          const response = await fetch(
+            "https://backend-mybrand-2y5k.onrender.com/api/v1/user/get-users",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            }
+          );
+          const data = await response.json();
+          console.log(data);
+          const tbodyUser = document.getElementById("user-table-body");
+          console.log(tbodyUser);
+          data.forEach((user, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${user.userName}</td>
+            <td>${user.firstName + " " + user.lastName}</td>
+            <td>${user.email}</td>
+          `;
+            tbodyUser.appendChild(row);
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      async function getProjects() {
         const response = await fetch(
-          "https://backend-mybrand-2y5k.onrender.com/api/v1/user/get-users",
+          "https://backend-mybrand-2y5k.onrender.com/api/v1/project/get-projects",
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
         const data = await response.json();
         console.log(data);
-        const tbodyUser = document.getElementById("user-table-body");
-        console.log(tbodyUser);
-        data.forEach((user,index) => {
+        const tbodyProject = document.getElementById("project-table-body");
+        console.log(tbodyProject);
+        data.forEach((project, index) => {
+          const projectId = project._id;
           const row = document.createElement("tr");
           row.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${user.userName}</td>
-        <td>${user.firstName +" "+ user.lastName}</td>
-        <td>${user.email}</td>
-      `;
-          tbodyUser.appendChild(row);
+            <td>${index + 1}</td>
+            <td>${project.title}</td>
+            <td>${project.field}</td>
+            <td>
+              <img src="${project.images[0].url}" alt="${
+            project.title
+          }" style="width:100px !important;height:100px !important">
+              </td>
+            <td>${project.description}</td>
+            <td>
+              <td>
+              <div style="display:flex;gap:5px">
+                <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${
+                  project._id
+                }"></i>
+                <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;"></i>
+                </div>
+              </td>
+          `;
+
+          tbodyProject.appendChild(row);
         });
       }
 
-      document.addEventListener("DOMContentLoaded", getUsers);
+      async function postProject(e) {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("title", document.getElementById("title").value);
+        formData.append("field", document.getElementById("field").value);
+        formData.append(
+          "description",
+          document.getElementById("description").value
+        );
+        formData.append(
+          "image",
+          document.querySelector('input[type="file"]').files[0]
+        );
+
+        try {
+          const response = await fetch(
+            "https://backend-mybrand-2y5k.onrender.com/api/v1/project/post-project",
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: formData,
+            }
+          );
+          const data = await response.json();
+          showToast(data.message, "success");
+          console.log(data);
+
+          const tbodyProject = document.getElementById("project-table-body");
+          const row = document.createElement("tr");
+          row.innerHTML = `
+          <td>${tbodyProject.childElementCount + 1}</td>
+          <td>${data.projectDetail.title}</td>
+          <td>${data.projectDetail.field}</td>
+          <td>
+            <img src="${data.projectDetail.images[0].url}" alt="${
+            data.projectDetail.title
+          }" style="width:100px;height:100px">
+          </td>
+          <td>${data.projectDetail.description}</td>
+          <td>
+              <div style="display:flex;gap:5px">
+                <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${
+                  project._id
+                }"></i>
+                <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;"></i>
+                </div>
+              </td>
+        `;
+          tbodyProject.appendChild(row);
+          projectForm.style.display = "none";
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      async function getProjectById(projectId) {
+        try {
+          const response = await fetch(
+            `https://backend-mybrand-2y5k.onrender.com/api/v1/project/${projectId}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
+          const data = await response.json();
+          console.log(data);
+          return data.projectDetail;
+        } catch (error) {
+          console.error("Error fetching project:", error);
+          return null;
+        }
+      }
+
+      // Function to open the project form for editing
+      function openProjectForm(project) {
+        const projectForm = document.getElementById("projectForm");
+        if (!projectForm) {
+          console.error("Project form not found!");
+          return;
+        }
+        projectForm.style.display = "block";
+        document.getElementById("title").value = project.title;
+        document.getElementById("field").value = project.field;
+        document.getElementById("description").value = project.description;
+        // Update submit button to update button
+        const submitButton = document.querySelector(
+          "#project-form button[type='submit']"
+        );
+        if (submitButton) {
+          submitButton.textContent = "Update";
+          submitButton.removeEventListener("click", postProject);
+          submitButton.addEventListener("click", () =>
+            updateProject(project._id)
+          );
+        } else {
+          console.error("Submit button not found!");
+        }
+      }
+
+      // Edit icon click event listener
+      document.addEventListener("click", async (e) => {
+        if (e.target && e.target.classList.contains("edit-icon")) {
+          const projectId = e.target.dataset.projectId;
+         
+          const project = await getProjectById(projectId);
+          console.log(project);
+          if (project) {
+            openProjectForm(project);
+          }
+        }
+      });
+
+      async function updateProject(projectId) {
+        try {
+          const formData = new FormData();
+          formData.append("title", document.getElementById("title").value);
+          formData.append("field", document.getElementById("field").value);
+          formData.append(
+            "description",
+            document.getElementById("description").value
+          );
+
+          const response = await fetch(
+            `https://backend-mybrand-2y5k.onrender.com/api/v1/project/${projectId}`,
+            {
+              method: "PUT",
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+              body: formData,
+            }
+          );
+
+          if (response.ok) {
+            const updatedProject = await response.json();
+            console.log("Project updated:", updatedProject);
+            // Handle success, maybe show a success message or redirect
+          } else {
+            // Handle errors
+            console.error("Failed to update project:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      document
+        .getElementById("project-form")
+        .addEventListener("submit", postProject);
+
+      async function getAllFunctions() {
+        await getProjects();
+        await getUsers();
+        await getMessage();
+      }
+      document.addEventListener("DOMContentLoaded", getAllFunctions);
     </script>
   </body>
 </html>
