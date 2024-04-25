@@ -7,6 +7,8 @@
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
     />
+    <link rel="shortcut icon" href="images/logo.png" type="image/x-icon">
+
     <link rel="stylesheet" href="style.css" />
     <title>MY Brand | Dashboard</title>
   </head>
@@ -184,15 +186,14 @@
         </div>
       </main>
 
+      <!-- User Content -->
+
       <main id="content-user" class="hide-content">
         <div class="header">
           <div class="left">
             <h1>Users</h1>
           </div>
         </div>
-
-        <!-- Insights -->
-        <!-- End of Insights -->
 
         <div class="bottom-data">
           <div class="orders">
@@ -376,7 +377,7 @@
 
       async function getMessage() {
         const response = await fetch(
-          "http://localhost:5000/api/v1/contact/get-messages",
+          "https://backend-mybrand-2y5k.onrender.com/api/v1/contact/get-messages",
           {
             method: "GET",
             headers: {
@@ -404,7 +405,7 @@
 
       async function getUsers() {
         const response = await fetch(
-          "http://localhost:5000/api/v1/user/get-users",
+          "https://backend-mybrand-2y5k.onrender.com/api/v1/user/get-users",
           {
             method: "GET",
             headers: {
