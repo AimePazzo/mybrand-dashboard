@@ -1,15 +1,3 @@
-window.addEventListener("DOMContentLoaded", async () => {
-    const userToken = localStorage.getItem('token');
-    
-    if (!userToken) {
-      projectLink.style.display = "none";
-      window.location.href = "./index.html";
-    } else {
-      projectLink.style.display = "block";
-    }
-  });
-  
-
 const sideLinks = document.querySelectorAll('.sidebar .side-menu li a:not(.logout)');
 const contentDashboard = document.getElementById('content-dashboard');
 const contentProject = document.getElementById('content-project');

@@ -6,6 +6,30 @@ const closeFormBlog = document.getElementById("closeFormBlog");
 const projectForm = document.getElementById("projectForm");
 const blogForm = document.getElementById("blogForm");
 
+function isTokenValid() {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return false; // Token doesn't exist
+    }
+    const decodedToken = JSON.parse(atob(token.split('.')[1]));
+    const currentTimestamp = Math.floor(new Date().getTime() / 1000);
+    if (decodedToken.exp < currentTimestamp) {
+      return false; // Token is expired
+    }
+    return true; // Token is valid
+  }
+  
+
+document.addEventListener("DOMContentLoaded", () => {
+    if (!isTokenValid()) {
+      // Redirect to login page or perform any other action
+      window.location.href = "./index.html";
+    }
+    
+    // Rest of your code
+  
+  
+
 openFormProject.addEventListener("click", () => {
     projectForm.style.display = "block";
 });
@@ -409,3 +433,4 @@ async function getAllFunctions() {
 }
 document.addEventListener("DOMContentLoaded", getAllFunctions);
 
+});
