@@ -1,3 +1,15 @@
+window.addEventListener("DOMContentLoaded", async () => {
+    const userToken = localStorage.getItem('token');
+    
+    if (!userToken) {
+      projectLink.style.display = "none";
+      window.location.href = "./index.html";
+    } else {
+      projectLink.style.display = "block";
+    }
+  });
+  
+
 const sideLinks = document.querySelectorAll('.sidebar .side-menu li a:not(.logout)');
 const contentDashboard = document.getElementById('content-dashboard');
 const contentProject = document.getElementById('content-project');
@@ -14,15 +26,14 @@ sideLinks.forEach(item => {
         });
         li.classList.add('active');
 
-        // contentDashboard.classList.add('hide-content');
-        // contentBlog.classList.add('hide-content');
+
         contentProject.classList.add('hide-content');
         contentUser.classList.add('hide-content');
         contentMessage.classList.add('hide-content');
-        // contentSettings.classList.add('hide-content');
+
 
         // Remove 'hide-content' class from the clicked content section
-       if (item === document.getElementById('project-link')) {
+        if (item === document.getElementById('project-link')) {
             contentDashboard.classList.add('hide-content');
             contentProject.classList.remove('hide-content');
         } else if (item === document.getElementById('user-link')) {
@@ -31,10 +42,8 @@ sideLinks.forEach(item => {
         } else if (item === document.getElementById('message-link')) {
             contentDashboard.classList.add('hide-content');
             contentMessage.classList.remove('hide-content');
-        } 
-        // else if (item === document.getElementById('settings-link')) {
-        //     contentSettings.classList.remove('hide-content');
-        // }
+        }
+
         else {
             contentDashboard.classList.remove('hide-content');
         }
@@ -90,50 +99,53 @@ function showToast(message, type) {
     const toast = document.createElement("div");
     toast.classList.add("toast");
     toast.innerHTML = message;
-  
+
     if (type === "error") {
-      toast.classList.add("error");
+        toast.classList.add("error");
     } else if (type === "success") {
-      toast.classList.add("success");
-    }else if(type === 'info') {
-      toast.classList.add("info");
+        toast.classList.add("success");
+    } else if (type === 'info') {
+        toast.classList.add("info");
     } else if (type === "confirmation") {
-      const confirmationToast = document.createElement("div");
-      confirmationToast.id = "confirmation-toast";
-      confirmationToast.classList.add("confirmation-toast");
-      const toastMessage = document.createElement("div");
-      toastMessage.classList.add("toast-message");
-      toastMessage.innerHTML = `
+        const confirmationToast = document.createElement("div");
+        confirmationToast.id = "confirmation-toast";
+        confirmationToast.classList.add("confirmation-toast");
+        const toastMessage = document.createElement("div");
+        toastMessage.classList.add("toast-message");
+        toastMessage.innerHTML = `
         <div style="display:flex;justify-content:center;align-items:center"><p>${message}</p></div>
         <div class="button-container">
           <button id="confirm-delete">Confirm</button>
           <button id="cancel-delete">Cancel</button>
         </div>`;
-      confirmationToast.appendChild(toastMessage);
-      document.body.appendChild(confirmationToast);
-  
-      const confirmButton = document.getElementById('confirm-delete');
-      const cancelButton = document.getElementById('cancel-delete');
-  
-      confirmButton.addEventListener('click', () => {
-        confirmationToast.remove();
-        // Call the function to handle delete here
-      });
-  
-      cancelButton.addEventListener('click', () => {
-        confirmationToast.remove();
-      });
-  
-      return;
-    }else {
-      console.error("Unknown toast type:", type);
-      return;
+        confirmationToast.appendChild(toastMessage);
+        document.body.appendChild(confirmationToast);
+
+        const confirmButton = document.getElementById('confirm-delete');
+        const cancelButton = document.getElementById('cancel-delete');
+
+        confirmButton.addEventListener('click', () => {
+            confirmationToast.remove();
+            // Call the function to handle delete here
+        });
+
+        cancelButton.addEventListener('click', () => {
+            confirmationToast.remove();
+        });
+
+        return;
+    } else {
+        console.error("Unknown toast type:", type);
+        return;
     }
-  
+
     document.body.appendChild(toast);
-  
+
     setTimeout(() => {
-      toast.remove();
+        toast.remove();
     }, 3000);
-  }
+}
+
+
+
 
