@@ -3,6 +3,7 @@ const contentDashboard = document.getElementById('content-dashboard');
 const contentProject = document.getElementById('content-project');
 const contentUser = document.getElementById('content-user');
 const contentMessage = document.getElementById('content-message');
+const contentComment = document.getElementById('content-comment');
 const blogLink = document.getElementById('blog-link');
 const contentBlog = document.getElementById('content-blog');
 
@@ -14,7 +15,7 @@ sideLinks.forEach(item => {
         });
         li.classList.add('active');
 
-
+        contentComment.classList.add('hide-content');
         contentProject.classList.add('hide-content');
         contentUser.classList.add('hide-content');
         contentMessage.classList.add('hide-content');
@@ -30,6 +31,9 @@ sideLinks.forEach(item => {
         } else if (item === document.getElementById('message-link')) {
             contentDashboard.classList.add('hide-content');
             contentMessage.classList.remove('hide-content');
+        }else if (item === document.getElementById('comment-link')) {
+            contentDashboard.classList.add('hide-content');
+            contentComment.classList.remove('hide-content');
         }
 
         else {

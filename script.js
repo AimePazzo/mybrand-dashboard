@@ -5,37 +5,25 @@ const closeFromProject = document.getElementById("update-close-btn");
 const closeFormBlog = document.getElementById("closeFormBlog");
 const projectForm = document.getElementById("projectForm");
 const blogForm = document.getElementById("blogForm");
+const updateProjectForm = document.getElementById("updateProjectFrom")
 
 function isTokenValid() {
     const token = localStorage.getItem("token");
     if (!token) {
-      return false; // Token doesn't exist
+        return false; // Token doesn't exist
     }
-    const decodedToken = JSON.parse(atob(token.split('.')[1]));
-    const currentTimestamp = Math.floor(new Date().getTime() / 1000);
-    if (decodedToken.exp < currentTimestamp) {
-      return false; // Token is expired
-    }
-    return true; // Token is valid
-  }
-  
+    return true;
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (!isTokenValid()) {
-      // Redirect to login page or perform any other action
-      window.location.href = "./index.html";
-    }
-    
-    // Rest of your code
-  
-  
+if (!isTokenValid()) {
+    // Redirect to login page or perform any other action
+    window.location.href = "./index.html";
+}
 
 openFormProject.addEventListener("click", () => {
     projectForm.style.display = "block";
 });
-// openFormBlog.addEventListener("click", () => {
-//   blogForm.style.display = "block";
-// });
+
 closeFormButton.addEventListener("click", () => {
     projectForm.style.display = "none";
 });
@@ -74,14 +62,14 @@ async function getMessage() {
     data.forEach((message, index) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-              <td>${index + 1}</td>
-            <td>${message.userName}</td>
-            <td>${message.email}</td>
-            <td>${message.subject}</td>
-            <td>${message.message}</td>
-            <td><span class= "status ${message.status}">${message.status
+                    <td>${index + 1}</td>
+                  <td>${message.userName}</td>
+                  <td>${message.email}</td>
+                  <td>${message.subject}</td>
+                  <td>${message.message}</td>
+                  <td><span class= "status ${message.status}">${message.status
             }</span></td>
-          `;
+                `;
         tbody.appendChild(row);
     });
 }
@@ -99,19 +87,18 @@ async function getUsers() {
             }
         );
         const data = await response.json();
-        console.log(data);
+
         userData = data;
         updateTotalUsers(userData);
         const tbodyUser = document.getElementById("user-table-body");
-        console.log(tbodyUser);
         data.forEach((user, index) => {
             const row = document.createElement("tr");
             row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${user.userName}</td>
-            <td>${user.firstName + " " + user.lastName}</td>
-            <td>${user.email}</td>
-          `;
+                  <td>${index + 1}</td>
+                  <td>${user.userName}</td>
+                  <td>${user.firstName + " " + user.lastName}</td>
+                  <td>${user.email}</td>
+                `;
             tbodyUser.appendChild(row);
         });
     } catch (error) {
@@ -130,53 +117,57 @@ function updateTotalUsers(userData) {
 let projectTotal = []
 
 async function getProjects() {
-    const response = await fetch(
-        "https://backend-mybrand-2y5k.onrender.com/api/v1/project/get-projects",
-        {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-        }
-    );
-    const data = await response.json();
-    console.log(data);
-    projectTotal = data;
-    updateTotalProjects(projectTotal);
-    const tbodyProject = document.getElementById("project-table-body");
-    console.log(tbodyProject);
-    data.forEach((project, index) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${project.title}</td>
-            <td>${project.field}</td>
-            <td>
-              <img src="${project.images[0].url}" alt="${project.title
-            }" style="width:100px !important;height:100px !important">
-              </td>
-            <td>${project.description}</td>
-            <td>
-              <td>
-              <div style="display:flex;gap:5px">
-                <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${project._id
-            }"></i>
-                <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;"
-                data-project-id ="${project._id}"></i>
-                </div>
-              </td>
-          `;
+    try {
+        const response = await fetch(
+            "https://backend-mybrand-2y5k.onrender.com/api/v1/project/get-projects",
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            }
+        );
+        const data = await response.json();
+        console.log(data)
+        projectTotal = data;
+        updateTotalProjects(projectTotal);
+        const tbodyProject = document.getElementById("project-table-body");
 
-        tbodyProject.appendChild(row);
-    });
+        data.forEach((project, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                  <td>${index + 1}</td>
+                  <td>${project.title}</td>
+                  <td>${project.field}</td>
+                  <td>
+                    <img src="${project.images[0].url}" alt="${project.title
+                }" style="width:100px !important;height:100px !important">
+                    </td>
+                  <td>${project.description}</td>
+                  <td>
+                    <div style="display:flex;gap:5px">
+                      <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${project._id
+                }"></i>
+                      <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;"
+                      data-project-id ="${project._id}"></i>
+                      </div>
+                    </td>
+                `;
+
+            tbodyProject.appendChild(row);
+        });
+    }
+    catch (error) {
+        console.error(error);
+    }
 }
 
 function updateTotalProjects(projectData) {
     const totalProjects = projectData.length;
     const totalProjectsElement = document.querySelector('.insights .info .p');
-    console.log(totalProjectsElement)
+
     if (totalProjectsElement) {
         totalProjectsElement.textContent = totalProjects;
     }
@@ -210,28 +201,28 @@ async function postProject(e) {
         );
         const data = await response.json();
         showToast(data.message, "success");
-        console.log(data);
+
 
         const tbodyProject = document.getElementById("project-table-body");
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${tbodyProject.childElementCount + 1}</td>
-          <td>${data.projectDetail.title}</td>
-          <td>${data.projectDetail.field}</td>
-          <td>
-            <img src="${data.projectDetail.images[0].url}" alt="${data.projectDetail.title
+                <td>${tbodyProject.childElementCount + 1}</td>
+                <td>${data.projectDetail.title}</td>
+                <td>${data.projectDetail.field}</td>
+                <td>
+                  <img src="${data.projectDetail.images[0].url}" alt="${data.projectDetail.title
             }" style="width:100px;height:100px">
-          </td>
-          <td>${data.projectDetail.description}</td>
-          <td>
-              <div style="display:flex;gap:5px">
-                <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${data.projectDetail._id
+                </td>
+                <td>${data.projectDetail.description}</td>
+                <td>
+                    <div style="display:flex;gap:5px">
+                      <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${data.projectDetail._id
             }"></i>
-                <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;" data-project-id ="${data.projectDetail._id
+                      <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;" data-project-id ="${data.projectDetail._id
             }"></i>
-                </div>
-              </td>
-        `;
+                      </div>
+                    </td>
+              `;
         tbodyProject.appendChild(row);
         projectForm.style.display = "none";
     } catch (error) {
@@ -317,7 +308,7 @@ async function updateProject(projectId) {
 
         if (response.ok) {
             const updatedProject = data.updateProject;
-            console.log("Project updated:", updatedProject);
+
 
             // Update project in the table
             const editIcon = document.querySelector(
@@ -330,21 +321,21 @@ async function updateProject(projectId) {
                     if (numberCell) {
                         const projectNumber = numberCell.textContent;
                         projectRow.innerHTML = `
-              <td>${projectNumber}</td>
-              <td>${updatedProject.title}</td>
-              <td>${updatedProject.field}</td>
-              <td>
-                <img src="${updatedProject.images[0]?.url || ""}" alt="${updatedProject.title
+                    <td>${projectNumber}</td>
+                    <td>${updatedProject.title}</td>
+                    <td>${updatedProject.field}</td>
+                    <td>
+                      <img src="${updatedProject.images[0]?.url || ""}" alt="${updatedProject.title
                             }" style="width:100px;height:100px">
-              </td>
-              <td>${updatedProject.description}</td>
-              <td>
-                <div style="display:flex;gap:5px">
-                  <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${projectId}"></i>
-                  <i class="bx bx-trash trash-icon" style="color:#1976D2;cursor: pointer; deleteProject('${projectId}')></i>
-                </div>
-              </td>
-            `;
+                    </td>
+                    <td>${updatedProject.description}</td>
+                    <td>
+                      <div style="display:flex;gap:5px">
+                        <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${projectId}"></i>
+                        <i class="bx bx-trash trash-icon" style="color:#1976D2;cursor: pointer; deleteProject('${projectId}')></i>
+                      </div>
+                    </td>
+                  `;
                     } else {
                         console.error("Number column not found!");
                     }
@@ -358,7 +349,7 @@ async function updateProject(projectId) {
             showToast(data.message, errror)
         }
     } catch (error) {
-        showToast("Something went wrong","error")
+        showToast("Something went wrong", "error")
     }
 }
 
@@ -381,7 +372,7 @@ document.addEventListener("click", async (e) => {
 });
 
 document.addEventListener("click", async (e) => {
-    
+
     if (e.target && e.target.classList.contains("bx-trash")) {
         const projectId = e.target.dataset.projectId;
         if (projectId) {
@@ -406,7 +397,7 @@ async function deleteProject(projectId) {
         const res = await response.json();
         const data = res.deletedProject;
         if (response.ok) {
-            console.log("Project deleted:", data.message);
+
 
             const projectRow = document
                 .querySelector(`i[data-project-id="${projectId}"]`)
@@ -422,15 +413,139 @@ async function deleteProject(projectId) {
     }
 }
 
+
+// Get all Comments
+async function getComments() {
+    try {
+        const response = await fetch(
+            `https://backend-mybrand-2y5k.onrender.com/api/v1/comments/get-comments`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            }
+        );
+        const data = await response.json();
+        console.log(data);
+        const tbodyComment = document.getElementById("comment-table-body");
+
+        data.data.forEach((comment, index) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                  <td>${index + 1}</td>
+                  <td>${comment.user.firstName}</td>
+                  <td>${comment.project.title}</td>
+                  <td>${comment.project.description}</tr>
+                    <td>${comment.comment}</td>
+                  <td>
+                    <div style="display:flex;gap:5px">
+                      <h3 style="font-size:12px; text-decoration: underline;color:#1976D2; cursor:pointer" data-comment-id ="${comment._id}" onclick="openPop('${comment._id}')">Details</h3>
+                      </div>
+                    </td>
+                `;
+
+            tbodyComment.appendChild(row);
+        });
+        return data;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}
+
+//   Get comments by ID
+async function getCommentById(commentId) {
+    try {
+        const response = await fetch(
+            `https://backend-mybrand-2y5k.onrender.com/api/v1/comments/get-comment/${commentId}`,
+            {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            }
+        );
+        const data = await response.json();
+        console.log(data)
+        return data.data;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}
 document
     .getElementById("project-form")
     .addEventListener("submit", postProject);
+
+// Get the popup
+const popup = document.getElementById("popup-form");
+
+// Get the button that opens the popup
+const btn = document.querySelector(".open-popup-btn");
+
+// Get the close button
+const closeBtn = document.getElementById("close-btn");
+
+// When the user clicks on the button, open the popup
+async function openPop(commentId) {
+    const commentData = await getCommentById(commentId);
+    console.log(commentData);
+
+    // Get elements from the popup form
+    const popup = document.getElementById("popup-form");
+    const image = popup.querySelector(".image");
+    const commentMessages = popup.querySelector(".comment-section p");
+    // const ratings = popup.querySelectorAll(".ratings span");
+    const description = popup.querySelector(".description-section p");
+    const username = popup.querySelector(".user-details p");
+    const date = popup.querySelector(".date p");
+
+    // Update the elements with the comment data
+    image.src = commentData.project.images[0].url;
+    commentMessages.textContent = commentData.comment;
+    description.textContent = commentData.project.description;
+    username.textContent = commentData.user.firstName + " " + commentData.user.lastName;
+    const createdAt = new Date(commentData.createdAt);
+    const formattedDate = `${createdAt.getDate()}/${createdAt.getMonth() + 1
+        }/${createdAt.getFullYear()}`;
+    date.textContent = formattedDate;
+
+    // Update ratings
+    // const ratingValue = commentData.rating;
+    // for (let i = 0; i < ratings.length; i++) {
+    //   if (i < ratingValue) {
+    //     ratings[i].classList.add("checked");
+    //   } else {
+    //     ratings[i].classList.remove("checked");
+    //   }
+    // }
+
+    // Display the popup form
+    popup.style.display = "block";
+}
+
+
+// When the user clicks on the close button, close the popup
+closeBtn.onclick = function () {
+    popup.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the popup, close it
+window.onclick = function (event) {
+    if (event.target == popup) {
+        popup.style.display = "none";
+    }
+}
 
 async function getAllFunctions() {
     await getProjects();
     await getUsers();
     await getMessage();
+    await getComments();
 }
 document.addEventListener("DOMContentLoaded", getAllFunctions);
-
-});

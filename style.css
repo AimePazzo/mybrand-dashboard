@@ -287,6 +287,78 @@ body{
   .form-container {
     padding: 20px;
   }
+
+  /* Popup container */
+.popup {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 6%;
+    top: 10%;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Popup content */
+  .popup-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* 5% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  /* Image Section */
+  .image-section {
+    text-align: center;
+  }
+  
+  .image {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  /* Comment Section */
+  .comment-section {
+    margin-top: 20px;
+  }
+  
+  .ratings {
+    color: orange;
+  }
+  
+  /* Description Section */
+  .description-section {
+    margin-top: 20px;
+  }
+  
+  .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+  .date{
+    display: flex;
+    flex-direction: column;
+  }
+  
   
   /* Clear floats */
   .clearfix::after {
@@ -552,14 +624,22 @@ body{
     border-collapse: collapse;
 }
 
-.content main .bottom-data .orders table th{
+.content main .bottom-data .orders table th:not(last-child){
     padding-bottom: 12px;
+    text-align: center;
     font-size: 13px;
     border-bottom: 1px solid var(--grey);
 }
 
+.content main .bottom-data .orders table th:last-child{
+    text-align: center !important;
+}
 .content main .bottom-data .orders table td{
     padding: 16px 5px;
+}
+
+.content main .bottom-data .orders table th:nth-child(2){
+    margin-right: 20px;
 }
 
 
