@@ -8,14 +8,33 @@
     <link rel="apple-touch-icon" sizes="180x180" href="../icon/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="../icon/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="../icon/favicon-16x16.png" />
-    <!-- <link rel="manifest" href="../icon/site.webmanifest" /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="mask-icon" href="../icon/safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#2b5797" />
     <meta name="theme-color" content="#ffffff" />
   </head>
+  <style>
+    .toast{
+    position: fixed;
+    top: 50px;
+    left: 50%;
+    transform: translateY(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #3d3e3d;
+    font-weight: bold;
+    z-index: 9999;
+  }
+  </style>
   <body>
     <main class="container-login">
       <div class="form-container">
+        <div id="loader">
+          <div class="progress">
+            <div class="indeterminate"></div>
+          </div>
+        </div>
         <form id="signin-form">
           <h2>Login</h2>
           <div class="email">
@@ -31,10 +50,13 @@
       </div>
     </main>
     <footer></footer>
+    
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
 
 function showToast(message, type) {
     const toast = document.createElement("div");
+    console.log(toast)
     toast.classList.add("toast");
     toast.innerHTML = message;
   
@@ -83,10 +105,19 @@ function showToast(message, type) {
       toast.remove();
     }, 3000);
   }
+  const loaderDiv = document.getElementById('loader');
+  function showLoader() {
+    loaderDiv.classList.add('show');
+  }
+
+  function hideLoader() {
+    loaderDiv.classList.remove('show');
+  }
       document
         .getElementById("signin-form")
         .addEventListener("submit", async function (event) {
           event.preventDefault();
+          showLoader();
 
           const formData = new FormData(this);
           const email = formData.get("email");
@@ -94,7 +125,7 @@ function showToast(message, type) {
 
           try {
             const response = await fetch(
-              "https://backend-mybrand-2y5k.onrender.com/api/v1/user/admin-login",
+              "https://backend-mybrand-xea6.onrender.com/api/v1/user/admin-login",
               {
                 method: "POST",
                 headers: {
@@ -111,8 +142,10 @@ function showToast(message, type) {
 
             const responseData = await response.json();
             const token = responseData.token;
+            console.log(responseData.message);
             localStorage.setItem("token", token);
-            showToast(`<i class="ri-checkbox-circle-fill" style="color:green !important"></i>`+responseData.message, "success");
+            showToast(responseData.message, "success");
+            hideLoader()
             setTimeout(()=>{
               window.location.href = "./dashboard.html";
             }, 3000);

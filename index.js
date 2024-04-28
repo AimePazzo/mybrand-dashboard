@@ -88,6 +88,7 @@ toggler.addEventListener('change', function () {
 });
 
 function showToast(message, type) {
+    console.log(message)
     const toast = document.createElement("div");
     toast.classList.add("toast");
     toast.innerHTML = message;
@@ -100,12 +101,13 @@ function showToast(message, type) {
         toast.classList.add("info");
     } else if (type === "confirmation") {
         const confirmationToast = document.createElement("div");
+        console.log(confirmationToast)
         confirmationToast.id = "confirmation-toast";
         confirmationToast.classList.add("confirmation-toast");
         const toastMessage = document.createElement("div");
         toastMessage.classList.add("toast-message");
         toastMessage.innerHTML = `
-        <div style="display:flex;justify-content:center;align-items:center"><p>${message}</p></div>
+        <div style="display:flex;justify-content:center;align-items:center; padding-bottom:10px"><p>${message}</p></div>
         <div class="button-container">
           <button id="confirm-delete">Confirm</button>
           <button id="cancel-delete">Cancel</button>

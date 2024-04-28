@@ -7,11 +7,73 @@
       href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css" integrity="sha512-OQDNdI5rpnZ0BRhhJc+btbbtnxaj+LdQFeh0V9/igiEPDiWE2fG+ZsXl0JEH+bjXKPJ3zcXqNyP4/F/NegVdZg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="shortcut icon" href="images/logo.png" type="image/x-icon" />
 
     <link rel="stylesheet" href="style.css" />
     <title>MY Brand | Dashboard</title>
   </head>
+
+<style>
+  .toast{
+    position: fixed;
+    top: 90px;
+    left: 50%;
+    transform: translateY(-50%);
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #3d3e3d;
+    font-weight: bold;
+    z-index: 9999;
+  }
+
+  .toast.error,
+      .toast.success,
+      .toast.info {
+        top: 20px;
+        background-color: white;
+      }
+
+      .confirmation-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        /* display: none; */
+      }
+
+      .toast-message {
+        text-align: center;
+      }
+      .button-container button {
+        padding: 8px 20px;
+        margin: 0 10px;
+        cursor: pointer;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 4px;
+      }
+
+      .button-container button:hover {
+        background-color: #0056b3;
+      }
+
+      .ri-information-2-fill {
+        color: #007bff !important;
+      }
+
+
+</style>
 
   <body>
     <!-- Sidebar -->
@@ -77,6 +139,14 @@
         </a>
       </nav>
 
+
+      <!-- Preloader -->
+
+      <div id="loader">
+        <div class="progress">
+          <div class="indeterminate"></div>
+        </div>
+      </div>
       <!-- End of Navbar -->
 
       <main id="content-dashboard">
@@ -165,9 +235,7 @@
             <button type="submit" class="btn" id="form-submit-button">
               Submit
             </button>
-            <button type="button" class="btn cancel project" id="closeForm">
-              Close
-            </button>
+              <i class="ri-close-circle-fill cancel" id="closeForm"></i>
           </form>
         </div>
 
@@ -217,13 +285,7 @@
             <button type="submit" class="btn" id="update-project-btn">
               Update Project
             </button>
-            <button
-              type="button"
-              class="btn cancel project"
-              id="update-close-btn"
-            >
-              Close
-            </button>
+              <i class="ri-close-circle-fill cancel" id="update-close-btn"></i>
           </form>
         </div>
 
@@ -293,33 +355,40 @@
 
       <div class="popup" id="popup-form">
         <div class="popup-content">
+          <form id="popup-form-comment">
           <span class="close" id="close-btn">&times;</span>
           <div class="image-section">
             <img src="image_url.jpg" alt="Image" class="image">
           </div>
-          <div class="comment-section">
-            <h2>Comment Messages</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget ante eu libero molestie faucibus. Morbi fermentum quam sed metus finibus efficitur.</p>
-            <div class="ratings">
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star checked"></span>
-              <span class="fa fa-star"></span>
-              <span class="fa fa-star"></span>
-            </div>
-          </div>
-          <div class="description-section">
-            <h2>Description</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          <div class="comment-sections">
             <div class="user-details">
               <h3>Username</h3>
               <p>name</p>
             </div>
+            <div class="comment-section">
+                <h3>Comment Messages</h2>
+                <p></p>
+              </div>
+              <div class="status">
+                <h3>Status</h2>
+                <select name="comment-status" id="comment-status">
+                  <option value="Pending">Pending</option>
+                  <option value="Approval">Approval</option>
+                  <option value="Not Approved">Not Approved</option>
+                </select>
+              </div>
+          </div>
+          <div class="description-section">
+            <h2>Description</h2>
+            <p>.</p>
+            
             <div class="date">
               <h3>Date</h3>
               <p>Date</p>
             </div>
           </div>
+          <button type="submit" class="comment-updateBtn">update status</button>
+        </form>
         </div>
       </div>
     

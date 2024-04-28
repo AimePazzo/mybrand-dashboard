@@ -209,20 +209,7 @@ body{
     display: none;
 }
 
-.toast {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateY(-50%);
-    padding: 10px 20px;
-    border-radius: 5px;
-    background-color: #fff;
-    color: #b0b0b0;
-    font-weight: bold;
-    z-index: 9999;
-  }
-
-.addBlog button ,.addProject button{
+.addProject button{
     background: var(--primary);
     color: var(--light);
     font-size: 18px;
@@ -272,20 +259,19 @@ body{
     margin-bottom: 10px;
   }
   
-  /* Set a style for the cancel button */
-  .form-container .cancel {
-    background-color: var(--danger);
-  }
-  
-  /* Float cancel and submit buttons and add an equal width */
-  .form-container .cancel, .form-container .btn {
-    float: left;
-    width: 50%;
-  }
-  
+
+
   /* Add padding to container elements */
   .form-container {
     padding: 20px;
+  }
+  .cancel{
+    color: rgb(239, 8, 8);
+    cursor: pointer;
+    font-size: 40px;
+    position: absolute;
+    top: 2rem;
+    right: 12rem;
   }
 
   /* Popup container */
@@ -337,9 +323,41 @@ body{
   }
   
   /* Comment Section */
-  .comment-section {
+  .comment-sections {
     margin-top: 20px;
   }
+  .comment-sections{
+    display: flex;
+    justify-content: space-between;
+  }
+  .comment-sections .status {
+    display: flex;
+    flex-direction: column;
+  }
+  .popup-content form button {
+    margin: 8px 0;
+    position: absolute;
+    top: calc(50% + 5rem);
+    padding: 10px;
+    border: none !important;
+    border-radius: 10px;
+    background-color: var(--success);
+    color: var(--light-success);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+
+    right: 11rem;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+.comment-updateBtn:hover, .comment-updateBtn:focus {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    background-color: var(--warning)!important;
+}
   
   .ratings {
     color: orange;
@@ -626,13 +644,13 @@ body{
 
 .content main .bottom-data .orders table th:not(last-child){
     padding-bottom: 12px;
-    text-align: center;
+    text-align: left;
     font-size: 13px;
     border-bottom: 1px solid var(--grey);
 }
 
 .content main .bottom-data .orders table th:last-child{
-    text-align: center !important;
+    text-align: left !important;
 }
 .content main .bottom-data .orders table td{
     padding: 16px 5px;
@@ -687,6 +705,8 @@ body{
     justify-content: center;
     height: 100vh;
 }
+
+
 .form-container form h2{
     font-size: 40px;
     font-weight: 700;
@@ -754,34 +774,15 @@ a{
     font-size: 18px;
 
 }
-.loader{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #f7f9fb;
-    z-index: 1;
-    transition: opacity 0.75s, visibility 0.75s;
-}
 
 
-.loader-hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-.loader::after{
-    content: "";
-    width: 75px;
-    height: 75px;
-    border: 15px solid #dddddd;
-    border-top-color: var(--primary);
-    border-radius:50% ;
-    animation: loading 0.75s ease infinite;
-}
+#loader {
+    display: none;
+  }
+  
+#loader.show {
+    display: block;
+  }
 
 @keyframes loading {
     from{
@@ -791,24 +792,12 @@ a{
         transform: rotate(1turn);
     }
 }
-.toast {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateY(-50%);
-    padding: 10px 20px;
-    border-radius: 5px;
-    /* background-color: #fff; */
-    color: #ffffff;
-    font-weight: bold;
-    z-index: 9999;
-  }
-.toast.success {
-    background-color: green;
-}
 
-.toast.error {
-    background-color: red;
+@media screen and (max-width:10000px) {
+    .comment-updateBtn{
+        top:calc(50% - 4.5rem) !important;
+        right: 9rem !important;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -819,6 +808,20 @@ a{
     .content{
         width: calc(100% - 60px);
         left: 200px;
+    }
+    .comment-updateBtn{
+        top:calc(50% + 10rem) !important;
+        right: 6rem !important;
+    }
+    .popup{
+        display: flex !important;
+        justify-content: center;
+        align-items: center;
+        left: 5%;
+    }
+    .popup-content{
+        margin: 0;
+
     }
 
 }
