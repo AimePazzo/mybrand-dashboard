@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("click", async (event) => {
         if (event.target && event.target.classList.contains("popups")) {
             const commentId = event.target.dataset.commentId;
-            console.log("clicked")
+
             openPop(commentId)
 
         }
@@ -588,7 +588,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 const data = await response.json();
                 hideLoader();
-                console.log(data); // Log the data here
+
                 return data;
             }
         } catch (error) {
@@ -603,7 +603,7 @@ document.addEventListener("DOMContentLoaded", function () {
         popup.style.display = "block";
     
         const commentData = await getCommentById(commentId);
-        console.log(commentData);
+  
         await updateSelectElement(commentId);
         
         // Get elements from the popup form
