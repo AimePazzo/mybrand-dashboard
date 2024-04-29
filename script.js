@@ -114,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   <td>${user.userName}</td>
                   <td>${user.firstName + " " + user.lastName}</td>
                   <td>${user.email}</td>
+                  <td>${user.verified}</td>
                 `;
                     tbodyUser.appendChild(row);
                 });
@@ -596,16 +597,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return null;
         }
     }
-    
+
 
     //   Get comments by ID
     async function openPop(commentId) {
         popup.style.display = "block";
-    
+
         const commentData = await getCommentById(commentId);
-  
+
         await updateSelectElement(commentId);
-        
+
         // Get elements from the popup form
         const image = popup.querySelector(".image");
         const commentMessages = popup.querySelector(".comment-section p");
@@ -613,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const description = popup.querySelector(".description-section p");
         const username = popup.querySelector(".user-details p");
         const date = popup.querySelector(".date p");
-    
+
         // Update the elements with the comment data
         if (commentData.data.length > 0) {
             image.src = commentData.data[0].project.images[0].url;
@@ -627,12 +628,12 @@ document.addEventListener("DOMContentLoaded", function () {
             // Handle if no comments are found
             console.log("No comments found");
         }
-        
+
         // Display the popup form
     }
-    
-    
-    
+
+
+
     async function updateSelectElement(commentId) {
         const commentDetails = await getCommentById(commentId);
         if (commentDetails) {
@@ -649,10 +650,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
-    
+
 
     // When the user clicks on the button, open the popup
-    
+
 
 
     // When the user clicks on the close button, close the popup
