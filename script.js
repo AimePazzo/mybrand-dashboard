@@ -614,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const description = popup.querySelector(".description-section p");
         const username = popup.querySelector(".user-details p");
         const date = popup.querySelector(".date p");
-
+        buttonUpdate.dataset.commentId = commentId;
         // Update the elements with the comment data
         if (commentData.data.length > 0) {
             image.src = commentData.data[0].project.images[0].url;
