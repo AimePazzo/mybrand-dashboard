@@ -514,6 +514,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    document
+        .getElementById("project-form")
+        .addEventListener("submit", postProject);
+
+    // Get the popup
+    const popup = document.getElementById("popup-form");
+
+    // Get the button that opens the popup
+
+    // Get the close button
+    const closeBtn = document.getElementById("close-btn");
 
     // Get all Comments
     async function getComments() {
@@ -532,7 +543,6 @@ document.addEventListener("DOMContentLoaded", function () {
             );
             if (response.ok) {
                 const data = await response.json();
-                console.log(data);
                 hideLoader()
                 const tbodyComment = document.getElementById("comment-table-body");
 
@@ -546,7 +556,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <td>${comment.comment}</td>
                   <td>
                     <div style="display:flex;gap:5px">
-                      <h3 style="font-size:12px; text-decoration: underline;color:#1976D2; cursor:pointer" data-comment-id ="${comment._id}" class="popups">Details</h3>
+                      <h3 style="font-size:12px; text-decoration: underline;color:#1976D2; cursor:pointer" data-comment-id ="${comment.project._id}" class="popups">Details</h3>
                       </div>
                     </td>
                 `;
@@ -561,7 +571,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    //   Get comments by ID
     async function getCommentById(commentId) {
         try {
             showLoader();
@@ -578,14 +587,52 @@ document.addEventListener("DOMContentLoaded", function () {
             );
             if (response.ok) {
                 const data = await response.json();
-                hideLoader()
-                return data.data;
+                hideLoader();
+                console.log(data); // Log the data here
+                return data;
             }
         } catch (error) {
             console.error("Error:", error);
             return null;
         }
     }
+    
+
+    //   Get comments by ID
+    async function openPop(commentId) {
+        popup.style.display = "block";
+    
+        const commentData = await getCommentById(commentId);
+        console.log(commentData);
+        await updateSelectElement(commentId);
+        
+        // Get elements from the popup form
+        const image = popup.querySelector(".image");
+        const commentMessages = popup.querySelector(".comment-section p");
+        const buttonUpdate = document.querySelector(".comment-updateBtn")
+        const description = popup.querySelector(".description-section p");
+        const username = popup.querySelector(".user-details p");
+        const date = popup.querySelector(".date p");
+    
+        // Update the elements with the comment data
+        if (commentData.data.length > 0) {
+            image.src = commentData.data[0].project.images[0].url;
+            commentMessages.textContent = commentData.data[0].comment;
+            description.textContent = commentData.data[0].project.description;
+            username.textContent = commentData.data[0].user.firstName + " " + commentData.data[0].user.lastName;
+            const createdAt = new Date(commentData.data[0].createdAt);
+            const formattedDate = `${createdAt.getDate()}/${createdAt.getMonth() + 1}/${createdAt.getFullYear()}`;
+            date.textContent = formattedDate;
+        } else {
+            // Handle if no comments are found
+            console.log("No comments found");
+        }
+        
+        // Display the popup form
+    }
+    
+    
+    
     async function updateSelectElement(commentId) {
         const commentDetails = await getCommentById(commentId);
         if (commentDetails) {
@@ -602,49 +649,10 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     }
-    document
-        .getElementById("project-form")
-        .addEventListener("submit", postProject);
-
-    // Get the popup
-    const popup = document.getElementById("popup-form");
-
-    // Get the button that opens the popup
-
-    // Get the close button
-    const closeBtn = document.getElementById("close-btn");
+    
 
     // When the user clicks on the button, open the popup
-    async function openPop(commentId) {
-        popup.style.display = "block";
-        console.log(commentId)
-        const commentData = await getCommentById(commentId);
-        console.log(commentData);
-        await updateSelectElement(commentId);
-        // Get elements from the popup form
-        const image = popup.querySelector(".image");
-        const commentMessages = popup.querySelector(".comment-section p");
-        const buttonUpdate = document.querySelector(".comment-updateBtn")
-        buttonUpdate.dataset.commentId = commentId
-        console.log(buttonUpdate)
-        // const ratings = popup.querySelectorAll(".ratings span");
-        const description = popup.querySelector(".description-section p");
-        const username = popup.querySelector(".user-details p");
-        const date = popup.querySelector(".date p");
-
-        // Update the elements with the comment data
-        image.src = commentData.project.images[0].url;
-        commentMessages.textContent = commentData.comment;
-        description.textContent = commentData.project.description;
-        username.textContent = commentData.user.firstName + " " + commentData.user.lastName;
-        const createdAt = new Date(commentData.createdAt);
-        const formattedDate = `${createdAt.getDate()}/${createdAt.getMonth() + 1
-            }/${createdAt.getFullYear()}`;
-        date.textContent = formattedDate;
-
-        // Display the popup form
-        
-    }
+    
 
 
     // When the user clicks on the close button, close the popup
