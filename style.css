@@ -837,12 +837,7 @@ a{
         top:calc(50% + 10rem) !important;
         right: 6rem !important;
     }
-    .popup{
-        display: flex !important;
-        justify-content: center;
-        align-items: center;
-        left: 5%;
-    }
+   
     .popup-content{
         margin: 0;
 
