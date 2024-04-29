@@ -8,6 +8,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const updateProjectForm = document.getElementById("updateProjectForm")
     const updateCommentForm = document.querySelector("#popup-form-comment")
+
+    const loaderDiv = document.getElementById('loading-spinner');
+    function showLoader() {
+        loaderDiv.style.display = 'block';
+    }
+
+    function hideLoader() {
+        loaderDiv.style.display = 'none';
+    }
+
     function isTokenValid() {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -46,6 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     async function getMessage() {
+        showLoader();
         const response = await fetch(
             "https://backend-mybrand-xea6.onrender.com/api/v1/contact/get-messages",
             {
@@ -56,25 +67,29 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
             }
         );
-        const data = await response.json();
-        const tbody = document.getElementById("message-table-body");
+        if (response.ok) {
+            hideLoader()
+            const data = await response.json();
+            const tbody = document.getElementById("message-table-body");
 
-        data.forEach((message, index) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
+            data.forEach((message, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
                     <td>${index + 1}</td>
                   <td>${message.userName}</td>
                   <td>${message.email}</td>
                   <td>${message.subject}</td>
                   <td>${message.message}</td>
                   <td><span class= "status ${message.status}">${message.status
-                }</span></td>
+                    }</span></td>
                 `;
-            tbody.appendChild(row);
-        });
+                tbody.appendChild(row);
+            });
+        }
     }
     let userData = [];
     async function getUsers() {
+        showLoader()
         try {
             const response = await fetch(
                 "https://backend-mybrand-xea6.onrender.com/api/v1/user/get-users",
@@ -87,20 +102,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             );
             const data = await response.json();
-
-            userData = data;
-            updateTotalUsers(userData);
-            const tbodyUser = document.getElementById("user-table-body");
-            data.forEach((user, index) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
+            if (data) {
+                hideLoader()
+                userData = data;
+                updateTotalUsers(userData);
+                const tbodyUser = document.getElementById("user-table-body");
+                data.forEach((user, index) => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
                   <td>${index + 1}</td>
                   <td>${user.userName}</td>
                   <td>${user.firstName + " " + user.lastName}</td>
                   <td>${user.email}</td>
                 `;
-                tbodyUser.appendChild(row);
-            });
+                    tbodyUser.appendChild(row);
+                });
+            }
         } catch (error) {
             console.error(error);
         }
@@ -117,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let projectTotal = []
 
     async function getProjects() {
+        showLoader()
         try {
             const response = await fetch(
                 "https://backend-mybrand-xea6.onrender.com/api/v1/project/get-projects",
@@ -129,34 +147,37 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
                 }
             );
-            const data = await response.json();
-            projectTotal = data;
-            updateTotalProjects(projectTotal);
-            const tbodyProject = document.getElementById("project-table-body");
+            if (response.ok) {
+                const data = await response.json();
+                hideLoader()
+                projectTotal = data;
+                updateTotalProjects(projectTotal);
+                const tbodyProject = document.getElementById("project-table-body");
 
-            data.forEach((project, index) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
+                data.forEach((project, index) => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
                   <td>${index + 1}</td>
                   <td>${project.title}</td>
                   <td>${project.field}</td>
                   <td>
                     <img src="${project.images[0].url}" alt="${project.title
-                    }" style="width:100px !important;height:100px !important">
+                        }" style="width:100px !important;height:100px !important">
                     </td>
                   <td>${project.description}</td>
                   <td>
                     <div style="display:flex;gap:5px">
                       <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${project._id
-                    }"></i>
+                        }"></i>
                       <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;"
                       data-project-id ="${project._id}"></i>
                       </div>
                     </td>
                 `;
 
-                tbodyProject.appendChild(row);
-            });
+                    tbodyProject.appendChild(row);
+                });
+            }
         }
         catch (error) {
             console.error(error);
@@ -174,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function postProject(e) {
         e.preventDefault();
-
+        showLoader()
         const formData = new FormData();
         formData.append("title", document.getElementById("title").value);
         formData.append("field", document.getElementById("field").value);
@@ -198,32 +219,35 @@ document.addEventListener("DOMContentLoaded", function () {
                     body: formData,
                 }
             );
-            const data = await response.json();
-            showToast(data.message, "success");
+            if (response.ok) {
+                hideLoader()
+                const data = await response.json();
+                showToast(data.message, "success");
 
 
-            const tbodyProject = document.getElementById("project-table-body");
-            const row = document.createElement("tr");
-            row.innerHTML = `
+                const tbodyProject = document.getElementById("project-table-body");
+                const row = document.createElement("tr");
+                row.innerHTML = `
                 <td>${tbodyProject.childElementCount + 1}</td>
                 <td>${data.projectDetail.title}</td>
                 <td>${data.projectDetail.field}</td>
                 <td>
                   <img src="${data.projectDetail.images[0].url}" alt="${data.projectDetail.title
-                }" style="width:100px;height:100px">
+                    }" style="width:100px;height:100px">
                 </td>
                 <td>${data.projectDetail.description}</td>
                 <td>
                     <div style="display:flex;gap:5px">
                       <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-project-id="${data.projectDetail._id
-                }"></i>
+                    }"></i>
                       <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;" data-project-id ="${data.projectDetail._id
-                }"></i>
+                    }"></i>
                       </div>
                     </td>
               `;
-            tbodyProject.appendChild(row);
-            projectForm.style.display = "none";
+                tbodyProject.appendChild(row);
+                projectForm.style.display = "none";
+            }
         } catch (error) {
             console.error("Error:", error);
         }
@@ -231,6 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     async function getProjectById(projectId) {
         try {
+            showLoader();
             const response = await fetch(
                 `https://backend-mybrand-xea6.onrender.com/api/v1/project/get-project/${projectId}`,
                 {
@@ -242,8 +267,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
                 }
             );
-            const data = await response.json();
-            return data;
+            if (response.ok) {
+                const data = await response.json();
+                hideLoader();
+                return data;
+            }
         } catch (error) {
             console.error("Error fetching project:", error);
             return null;
@@ -291,6 +319,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "image",
                 document.getElementById("update-image").files[0]
             );
+            showLoader();
 
             const response = await fetch(
                 `https://backend-mybrand-xea6.onrender.com/api/v1/project/update-project/${projectId}`,
@@ -307,7 +336,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (response.ok) {
                 const updatedProject = data.updateProject;
-
+                hideLoader()
 
                 // Update project in the table
                 const editIcon = document.querySelector(
@@ -394,45 +423,47 @@ document.addEventListener("DOMContentLoaded", function () {
         if (buttons.length > 0) {
             const commentId = buttons[0].dataset.commentId;
             const selectElement = document.getElementById('comment-status')
-            const selectedValue = selectElement.value; 
-            updateComment({ commentId, selectedValue})
+            const selectedValue = selectElement.value;
+            updateComment({ commentId, selectedValue })
         }
     })
 
     async function updateComment(commentData) {
+        showLoader();
         const response = await fetch(`https://backend-mybrand-xea6.onrender.com/api/v1/comments/update-comment/${commentData.commentId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({
-            status: commentData.selectedValue
-          })
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+            body: JSON.stringify({
+                status: commentData.selectedValue
+            })
         });
         if (response.ok) {
-          const data = await response.json();
-          if (data.message) {
-            showToast(data.message, "success");
-            // Update the select element
-            const selectElement = document.getElementById("comment-status");
-            if (selectElement) {
-              const options = selectElement.options;
-              for (let i = 0; i < options.length; i++) {
-                if (options[i].value === commentData.selectedValue) {
-                  options[i].selected = true;
-                } else {
-                  options[i].selected = false;
+            const data = await response.json();
+            hideLoader();
+            if (data.message) {
+                showToast(data.message, "success");
+                // Update the select element
+                const selectElement = document.getElementById("comment-status");
+                if (selectElement) {
+                    const options = selectElement.options;
+                    for (let i = 0; i < options.length; i++) {
+                        if (options[i].value === commentData.selectedValue) {
+                            options[i].selected = true;
+                        } else {
+                            options[i].selected = false;
+                        }
+                    }
                 }
-              }
+            } else {
+                showToast(data.error, "error");
             }
-          } else {
-            showToast(data.error, "error");
-          }
         }
-      }
-      
+    }
+
 
     async function deleteProject(projectId) {
         try {
@@ -447,6 +478,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const cancelButton = document.getElementById("cancel-delete");
 
             confirmButton.addEventListener("click", async () => {
+                showLoader();
                 const response = await fetch(
                     `https://backend-mybrand-xea6.onrender.com/api/v1/project/delete-project/${projectId}`,
                     {
@@ -457,6 +489,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 );
                 if (response.ok) {
+                    hideLoader()
                     const projectRow = document
                         .querySelector(`i[data-project-id="${projectId}"]`)
                         .closest("tr");
@@ -484,6 +517,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Get all Comments
     async function getComments() {
         try {
+            showLoader();
             const response = await fetch(
                 `https://backend-mybrand-xea6.onrender.com/api/v1/comments/get-comments`,
                 {
@@ -495,13 +529,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
                 }
             );
-            const data = await response.json();
+            if (response.ok) {
+                const data = await response.json();
+                hideLoader()
+                const tbodyComment = document.getElementById("comment-table-body");
 
-            const tbodyComment = document.getElementById("comment-table-body");
-
-            data.data.forEach((comment, index) => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
+                data.data.forEach((comment, index) => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
                   <td>${index + 1}</td>
                   <td>${comment.user.firstName}</td>
                   <td>${comment.project.title}</td>
@@ -514,9 +549,10 @@ document.addEventListener("DOMContentLoaded", function () {
                     </td>
                 `;
 
-                tbodyComment.appendChild(row);
-            });
-            return data;
+                    tbodyComment.appendChild(row);
+                });
+                return data;
+            }
         } catch (error) {
             console.error("Error:", error);
             return null;
@@ -526,6 +562,7 @@ document.addEventListener("DOMContentLoaded", function () {
     //   Get comments by ID
     async function getCommentById(commentId) {
         try {
+            showLoader();
             const response = await fetch(
                 `https://backend-mybrand-xea6.onrender.com/api/v1/comments/get-comment/${commentId}`,
                 {
@@ -537,9 +574,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     },
                 }
             );
-            const data = await response.json();
-
-            return data.data;
+            if (response.ok) {
+                const data = await response.json();
+                hideLoader()
+                return data.data;
+            }
         } catch (error) {
             console.error("Error:", error);
             return null;
@@ -548,19 +587,19 @@ document.addEventListener("DOMContentLoaded", function () {
     async function updateSelectElement(commentId) {
         const commentDetails = await getCommentById(commentId);
         if (commentDetails) {
-          const selectElement = document.getElementById("comment-status");
-          if (selectElement) {
-            const options = selectElement.options;
-            for (let i = 0; i < options.length; i++) {
-              if (options[i].value === commentDetails.status) {
-                options[i].selected = true;
-              } else {
-                options[i].selected = false;
-              }
+            const selectElement = document.getElementById("comment-status");
+            if (selectElement) {
+                const options = selectElement.options;
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].value === commentDetails.status) {
+                        options[i].selected = true;
+                    } else {
+                        options[i].selected = false;
+                    }
+                }
             }
-          }
         }
-      }
+    }
     document
         .getElementById("project-form")
         .addEventListener("submit", postProject);
