@@ -413,6 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener("click", async (event) => {
         if (event.target && event.target.classList.contains("popups")) {
             const commentId = event.target.dataset.commentId;
+            console.log("clicked")
             openPop(commentId)
 
         }
@@ -531,6 +532,7 @@ document.addEventListener("DOMContentLoaded", function () {
             );
             if (response.ok) {
                 const data = await response.json();
+                console.log(data);
                 hideLoader()
                 const tbodyComment = document.getElementById("comment-table-body");
 
@@ -614,11 +616,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // When the user clicks on the button, open the popup
     async function openPop(commentId) {
+        popup.style.display = "block";
+        console.log(commentId)
         const commentData = await getCommentById(commentId);
         console.log(commentData);
         await updateSelectElement(commentId);
         // Get elements from the popup form
-        const popup = document.getElementById("popup-form");
         const image = popup.querySelector(".image");
         const commentMessages = popup.querySelector(".comment-section p");
         const buttonUpdate = document.querySelector(".comment-updateBtn")
@@ -640,7 +643,7 @@ document.addEventListener("DOMContentLoaded", function () {
         date.textContent = formattedDate;
 
         // Display the popup form
-        popup.style.display = "block";
+        
     }
 
 

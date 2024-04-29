@@ -334,10 +334,12 @@ body{
     display: flex;
     flex-direction: column;
   }
+  .buttonUpdate{
+    display: flex;
+    justify-content: right;
+  }
   .popup-content form button {
     margin: 8px 0;
-    position: absolute;
-    top: calc(50% + 5rem);
     padding: 10px;
     border: none !important;
     border-radius: 10px;
@@ -347,10 +349,9 @@ body{
     cursor: pointer;
     transition: all 0.3s ease;
     outline: none;
-
-    right: 11rem;
     border: 1px solid #ccc;
     box-sizing: border-box;
+    
   }
 
 .comment-updateBtn:hover, .comment-updateBtn:focus {
