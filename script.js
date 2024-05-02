@@ -115,11 +115,63 @@ document.addEventListener("DOMContentLoaded", function () {
                   <td>${user.firstName + " " + user.lastName}</td>
                   <td>${user.email}</td>
                   <td>${user.verified}</td>
+                  <td>
+                  <div style="display:flex;gap:5px">
+                      <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-user-id="${user._id
+                        }"></i>
+                      <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;"
+                      data-user-id ="${user._id}"></i>
+                      </div>
+                  </td>
                 `;
                     tbodyUser.appendChild(row);
                 });
             }
         } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async function deleteUser(userId) {
+        try {
+            // Show confirmation toast
+            showToast(
+                `<i class="ri-question-fill" style="color:blue !important;font-size:30px"></i>` + `<p> Are you sure you want to delete this user?</p>`,
+                "confirmation"
+            );
+
+            // Handle delete when confirmed
+            const confirmButton = document.getElementById("confirm-delete");
+            const cancelButton = document.getElementById("cancel-delete");
+
+            confirmButton.addEventListener("click", async () => {
+                showLoader();
+                const response = await fetch(
+                    `https://backend-mybrand-xea6.onrender.com/api/v1/user/delete-use/${userId}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                    }
+                );
+                if (response.ok) {
+                    hideLoader()
+                    const res = await response.json()
+                    showToast(res.message,'success')
+                    const userRow = document
+                        .querySelector(`i[data-user-id="${userId}"]`)
+                        .closest("tr");
+                    if (userRow) {
+                        userRow.remove();
+                    }
+                } else {
+                    const res = await response.json();
+                    console.error("Failed to delete user:", res.message);
+                }
+            
+        })
+     } catch (error) {
             console.error(error);
         }
     }
@@ -401,12 +453,19 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     document.addEventListener("click", async (e) => {
-        if (e.target && e.target.classList.contains("bx-trash")) {
+        if (e.target && e.target.classList.contains("bx-trash") && e.target.dataset.projectId) {
             const projectId = e.target.dataset.projectId;
             if (projectId) {
                 deleteProject(projectId);
             } else {
                 console.error("Project id not found!");
+            }
+        }else if(e.target && e.target.classList.contains('bx-trash') && e.target.dataset.userId) {
+            const userId = e.target.dataset.userId;
+            if (userId) {
+                deleteUser(userId);
+            } else {
+                console.error("User id not found!");
             }
         }
     });
@@ -431,6 +490,7 @@ document.addEventListener("DOMContentLoaded", function () {
     })
 
     async function updateComment(commentData) {
+        
         showLoader();
         const response = await fetch(`https://backend-mybrand-xea6.onrender.com/api/v1/comments/update-comment/${commentData.commentId}`, {
             method: "PUT",
@@ -446,6 +506,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (response.ok) {
             const data = await response.json();
             hideLoader();
+        
             if (data.message) {
                 showToast(data.message, "success");
                 // Update the select element
@@ -604,7 +665,6 @@ document.addEventListener("DOMContentLoaded", function () {
         popup.style.display = "block";
 
         const commentData = await getCommentById(commentId);
-
         await updateSelectElement(commentId);
 
         // Get elements from the popup form
@@ -624,6 +684,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const createdAt = new Date(commentData.data[0].createdAt);
             const formattedDate = `${createdAt.getDate()}/${createdAt.getMonth() + 1}/${createdAt.getFullYear()}`;
             date.textContent = formattedDate;
+            const statusSelect = document.getElementById('comment-status');
+            statusSelect.value = commentData.data[0].status;
         } else {
             // Handle if no comments are found
             console.log("No comments found");
