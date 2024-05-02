@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
             confirmButton.addEventListener("click", async () => {
                 showLoader();
                 const response = await fetch(
-                    `https://backend-mybrand-xea6.onrender.com/api/v1/user/delete-use/${userId}`,
+                    `https://backend-mybrand-xea6.onrender.com/api/v1/user/delete-user/${userId}`,
                     {
                         method: "DELETE",
                         headers: {
