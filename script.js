@@ -55,6 +55,10 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "./index.html";
     });
 
+    function closeForm() {
+        document.getElementById("updateForm").style.display = "none";
+      }
+
     async function getMessage() {
         showLoader();
         const response = await fetch(
