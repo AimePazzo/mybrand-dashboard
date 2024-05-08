@@ -606,7 +606,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 const data = await response.json();
                 hideLoader()
-                console.log(data)
                 const tbodyComment = document.getElementById("comment-table-body");
 
                 data.data.forEach((comment, index) => {
