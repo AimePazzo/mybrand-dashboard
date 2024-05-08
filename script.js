@@ -118,8 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
                   <td>${user.verified}</td>
                   <td>
                   <div style="display:flex;gap:5px">
-                      <i class="bx bx-edit edit-icon" style="color:#D32F2F;cursor: pointer;" data-user-id="${user._id
-                        }"></i>
+                     
                       <i class="bx bx-trash" style="color:#1976D2;cursor: pointer;"
                       data-user-id ="${user._id}"></i>
                       </div>
