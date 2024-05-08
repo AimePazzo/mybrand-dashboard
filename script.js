@@ -55,9 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "./index.html";
     });
 
-    function closeForm() {
-        document.getElementById("updateForm").style.display = "none";
-      }
 
     async function getMessage() {
         showLoader();
@@ -431,7 +428,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.error("Edit icon not found!");
                 }
             } else {
-                showToast(data.message, errror)
+                showToast(data.message, "error")
             }
         } catch (error) {
             showToast("Something went wrong", "error")
@@ -610,6 +607,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (response.ok) {
                 const data = await response.json();
                 hideLoader()
+                console.log(data)
                 const tbodyComment = document.getElementById("comment-table-body");
 
                 data.data.forEach((comment, index) => {
